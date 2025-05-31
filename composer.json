@@ -1,0 +1,41 @@
+{
+  "name": "symfony/ux-echarts",
+  "type": "symfony-bundle",
+  "description": "Echarts integration for Symfony",
+  "keywords": ["symfony-ux"],
+  "homepage": "https://symfony.com",
+  "license": "MIT",
+  "authors": [],
+  "autoload": {
+    "psr-4": {
+      "Symfony\\UX\\ECharts\\": "src/"
+    }
+  },
+  "autoload-dev": {
+    "psr-4": {
+      "Symfony\\UX\\ECharts\\Tests\\": "tests/"
+    }
+  },
+  "require": {
+    "symfony/config": "^7.3",
+    "symfony/dependency-injection": "^7.3",
+    "symfony/http-kernel": "^7.3",
+    "symfony/stimulus-bundle": "^2.9.1"
+  },
+  "require-dev": {
+    "symfony/framework-bundle": "^7.3",
+    "symfony/phpunit-bridge": "^7.3",
+    "symfony/twig-bundle": "^7.3",
+    "symfony/var-dumper": "^7.3"
+  },
+  "conflict": {
+    "symfony/flex": "<1.13"
+  },
+  "extra": {
+    "thanks": {
+      "name": "symfony/ux",
+      "url": "https://github.com/symfony/ux"
+    }
+  },
+  "minimum-stability": "dev"
+}

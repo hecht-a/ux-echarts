@@ -1,0 +1,25 @@
+{
+  "name": "@symfony/ux-echarts",
+  "description": "ECharts integration for symfony",
+  "version": "1.0.0",
+  "main": "dist/controller.js",
+  "symfony": {
+    "controllers": {
+      "echarts": {
+        "main": "dist/controller.js",
+        "webpackMode": "eager",
+        "fetch": "eager",
+        "enabled": true
+      }
+    }
+  },
+  "peerDependencies": {
+    "@hotwired/stimulus": "^3.2.2",
+    "echarts": "^5.6.0"
+  },
+  "devDependencies": {
+    "@hotwired/stimulus": "^3.2.2",
+    "echarts": "^5.6.0",
+    "typescript": "^5.8.3"
+  }
+}
