@@ -1,5 +1,5 @@
 {
-  "name": "symfony/ux-echarts",
+  "name": "hecht-a/ux-echarts",
   "type": "symfony-bundle",
   "description": "Echarts integration for Symfony",
   "keywords": ["symfony-ux"],
@@ -36,6 +36,5 @@
       "name": "symfony/ux",
       "url": "https://github.com/symfony/ux"
     }
-  },
-  "minimum-stability": "dev"
+  }
 }
