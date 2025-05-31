@@ -6,7 +6,7 @@ vos templates Twig, en combinant PHP, Twig et Stimulus.
 ## ✅ Installation
 
 ```bash
-composer require symfony/ux-echarts
+composer require hecht-a/ux-echarts:dev-main
 npm install --force
 ```
 
