@@ -1,8 +1,8 @@
 <?php
 
-namespace Symfony\UX\ECharts\Twig;
+namespace HechtA\UX\ECharts\Twig;
 
-use Symfony\UX\ECharts\Model\ECharts;
+use HechtA\UX\ECharts\Model\ECharts;
 use Symfony\UX\StimulusBundle\Helper\StimulusHelper;
 use Twig\Extension\AbstractExtension;
 use Twig\TwigFunction;
@@ -28,7 +28,7 @@ class ChartExtension extends AbstractExtension
         if ($chart->getDataController()) {
             $controllers[$chart->getDataController()] = [];
         }
-        $controllers['@symfony/ux-echarts/echarts'] = ['view' => $chart->createView()];
+        $controllers['@hecht-a/ux-echarts/echarts'] = ['view' => $chart->createView()];
 
         $stimulusAttributes = $this->stimulus->createStimulusAttributes();
         foreach ($controllers as $name => $controllerValues) {

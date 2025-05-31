@@ -1,8 +1,8 @@
 <?php
 
-namespace Symfony\UX\ECharts\Builder;
+namespace HechtA\UX\ECharts\Builder;
 
-use Symfony\UX\ECharts\Model\ECharts;
+use HechtA\UX\ECharts\Model\ECharts;
 
 interface EChartsBuilderInterface
 {

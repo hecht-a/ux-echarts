@@ -22,8 +22,8 @@ namespace App\Controller;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
-use Symfony\UX\ECharts\Builder\EChartsBuilderInterface;
-use Symfony\UX\ECharts\Model\ECharts;
+use HechtA\UX\ECharts\Builder\EChartsBuilderInterface;
+use HechtA\UX\ECharts\Model\ECharts;
 
 final class HomeController extends AbstractController
 {
@@ -89,7 +89,7 @@ $chart->setAttributes([
 ]);
 ```
 
-> Le controller `@symfony/ux-echarts/echarts` est toujours injecté automatiquement.
+> Le controller `@hecht-a/ux-echarts/echarts` est toujours injecté automatiquement.
 
 ## 🧩 API PHP
 

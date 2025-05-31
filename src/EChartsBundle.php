@@ -1,6 +1,6 @@
 <?php
 
-namespace Symfony\UX\ECharts;
+namespace HechtA\UX\ECharts;
 
 use Symfony\Component\HttpKernel\Bundle\Bundle;
 

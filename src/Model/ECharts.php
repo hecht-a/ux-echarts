@@ -1,6 +1,6 @@
 <?php
 
-namespace Symfony\UX\ECharts\Model;
+namespace HechtA\UX\ECharts\Model;
 
 class ECharts
 {

@@ -1,12 +1,12 @@
 <?php
 
-namespace Symfony\UX\ECharts\Tests\Twig;
+namespace HechtA\UX\ECharts\Tests\Twig;
 
 use PHPUnit\Framework\TestCase;
-use Symfony\UX\ECharts\Builder\EChartsBuilderInterface;
-use Symfony\UX\ECharts\Model\ECharts;
-use Symfony\UX\ECharts\Tests\Kernel\TwigAppKernel;
-use Symfony\UX\ECharts\Twig\ChartExtension;
+use HechtA\UX\ECharts\Builder\EChartsBuilderInterface;
+use HechtA\UX\ECharts\Model\ECharts;
+use HechtA\UX\ECharts\Tests\Kernel\TwigAppKernel;
+use HechtA\UX\ECharts\Twig\ChartExtension;
 
 class EChartsBundleTest extends TestCase
 {
@@ -46,6 +46,6 @@ class EChartsBundleTest extends TestCase
             ['data-controller' => 'echarts', 'class' => 'myclass']
         );
 
-        $this->assertSame('<div data-controller="symfony--ux-echarts--echarts" data-symfony--ux-echarts--echarts-view-value="{&quot;options&quot;:{&quot;xAxis&quot;:{&quot;type&quot;:&quot;category&quot;,&quot;data&quot;:[&quot;Mon&quot;,&quot;Tue&quot;,&quot;Wed&quot;,&quot;Thu&quot;,&quot;Fri&quot;,&quot;Sat&quot;,&quot;Sun&quot;]},&quot;yAxis&quot;:{&quot;type&quot;:&quot;value&quot;},&quot;series&quot;:[{&quot;data&quot;:[150,230,224,218,135,147,260],&quot;type&quot;:&quot;line&quot;}]},&quot;attributes&quot;:{&quot;style&quot;:&quot;width: 800px; height: 400px;&quot;,&quot;data-controller&quot;:&quot;echarts&quot;,&quot;class&quot;:&quot;myclass&quot;},&quot;themes&quot;:[],&quot;currentTheme&quot;:null}" style="width: 800px; height: 400px;" class="myclass"></div>', $rendered);
+        $this->assertSame('<div data-controller="hecht-a--ux-echarts--echarts" data-hecht-a--ux-echarts--echarts-view-value="{&quot;options&quot;:{&quot;xAxis&quot;:{&quot;type&quot;:&quot;category&quot;,&quot;data&quot;:[&quot;Mon&quot;,&quot;Tue&quot;,&quot;Wed&quot;,&quot;Thu&quot;,&quot;Fri&quot;,&quot;Sat&quot;,&quot;Sun&quot;]},&quot;yAxis&quot;:{&quot;type&quot;:&quot;value&quot;},&quot;series&quot;:[{&quot;data&quot;:[150,230,224,218,135,147,260],&quot;type&quot;:&quot;line&quot;}]},&quot;attributes&quot;:{&quot;style&quot;:&quot;width: 800px; height: 400px;&quot;,&quot;data-controller&quot;:&quot;echarts&quot;,&quot;class&quot;:&quot;myclass&quot;},&quot;themes&quot;:[],&quot;currentTheme&quot;:null}" style="width: 800px; height: 400px;" class="myclass"></div>', $rendered);
     }
 }

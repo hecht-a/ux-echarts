@@ -5,15 +5,21 @@
   "keywords": ["symfony-ux"],
   "homepage": "https://symfony.com",
   "license": "MIT",
-  "authors": [],
+  "authors": [
+    {
+      "name": "Axel HECHT",
+      "email": "axel.hct@gmail.com",
+      "homepage": "https://github.com/hecht-a"
+    }
+  ],
   "autoload": {
     "psr-4": {
-      "Symfony\\UX\\ECharts\\": "src/"
+      "HechtA\\UX\\ECharts\\": "src/"
     }
   },
   "autoload-dev": {
     "psr-4": {
-      "Symfony\\UX\\ECharts\\Tests\\": "tests/"
+      "HechtA\\UX\\ECharts\\Tests\\": "tests/"
     }
   },
   "require": {

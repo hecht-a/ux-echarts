@@ -1,5 +1,5 @@
 {
-  "name": "@symfony/ux-echarts",
+  "name": "@hecht-a/ux-echarts",
   "description": "ECharts integration for symfony",
   "version": "1.0.0",
   "main": "dist/controller.js",

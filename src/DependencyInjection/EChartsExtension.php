@@ -1,16 +1,15 @@
 <?php
 
-namespace Symfony\UX\ECharts\DependencyInjection;
+namespace HechtA\UX\ECharts\DependencyInjection;
 
 use Symfony\Component\AssetMapper\AssetMapperInterface;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Definition;
 use Symfony\Component\DependencyInjection\Extension\Extension;
-use Symfony\Component\DependencyInjection\Extension\PrependExtensionInterface;
 use Symfony\Component\DependencyInjection\Reference;
-use Symfony\UX\ECharts\Builder\EChartsBuilder;
-use Symfony\UX\ECharts\Builder\EChartsBuilderInterface;
-use Symfony\UX\ECharts\Twig\ChartExtension;
+use HechtA\UX\ECharts\Builder\EChartsBuilder;
+use HechtA\UX\ECharts\Builder\EChartsBuilderInterface;
+use HechtA\UX\ECharts\Twig\ChartExtension;
 
 class EChartsExtension extends Extension
 {

@@ -1,13 +1,13 @@
 <?php
 
-namespace Symfony\UX\ECharts\Tests\Kernel;
+namespace HechtA\UX\ECharts\Tests\Kernel;
 
 use Symfony\Bundle\FrameworkBundle\FrameworkBundle;
 use Symfony\Bundle\TwigBundle\TwigBundle;
 use Symfony\Component\Config\Loader\LoaderInterface;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\HttpKernel\Kernel;
-use Symfony\UX\ECharts\EChartsBundle;
+use HechtA\UX\ECharts\EChartsBundle;
 use Symfony\UX\StimulusBundle\StimulusBundle;
 
 class TwigAppKernel extends Kernel
