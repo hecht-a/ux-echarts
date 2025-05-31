@@ -1,4 +1,4 @@
-name: Tag release if CI passes
+name: PHPUnit tests
 
 on:
   push:
