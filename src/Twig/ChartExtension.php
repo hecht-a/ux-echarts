@@ -9,7 +9,7 @@ use Twig\TwigFunction;
 
 class ChartExtension extends AbstractExtension
 {
-    public function __construct(private StimulusHelper $stimulus)
+    public function __construct(private readonly StimulusHelper $stimulus)
     {
     }
 
@@ -47,6 +47,9 @@ class ChartExtension extends AbstractExtension
             }
         }
 
-        return \sprintf('<div %s></div>', $stimulusAttributes);
+        $width = $chart->getWidth() . 'px';
+        $height = $chart->getHeight() . 'px';
+
+        return \sprintf('<div style="width: %s; height: %s" %s></div>', $width, $height, $stimulusAttributes);
     }
 }
