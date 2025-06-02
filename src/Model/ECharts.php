@@ -14,6 +14,8 @@ class ECharts
     private array $series = [];
     private array $themes = [];
     private ?string $currentTheme = null;
+    private int $width = 800;
+    private int $height = 400;
 
     public function __construct(private readonly ?string $id = null)
     {
@@ -83,6 +85,20 @@ class ECharts
         return $this;
     }
 
+    public function setWidth(int $width): self
+    {
+        $this->width = $width;
+
+        return $this;
+    }
+
+    public function setHeight(int $height): self
+    {
+        $this->height = $height;
+
+        return $this;
+    }
+
     public function createView(): array
     {
         return [
@@ -108,5 +124,15 @@ class ECharts
     public function getAttributes(): array
     {
         return $this->attributes;
+    }
+
+    public function getWidth(): int
+    {
+        return $this->width;
+    }
+
+    public function getHeight(): int
+    {
+        return $this->height;
     }
 }

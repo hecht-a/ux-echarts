@@ -22,13 +22,12 @@ class EChartsBundleTest extends TestCase
         $chart = $builder->createECharts(ECharts::TYPE_LINE);
 
         $chart
-            ->setAttributes([
-                'style' => 'width: 800px; height: 400px;',
-            ])
             ->addSerie([
                 'data' => [150, 230, 224, 218, 135, 147, 260],
                 'type' => 'line',
             ])
+            ->setWidth(400)
+            ->setHeight(200)
             ->setOptions([
                 'xAxis' => [
                     'type' => 'category',
@@ -46,6 +45,6 @@ class EChartsBundleTest extends TestCase
             ['data-controller' => 'echarts', 'class' => 'myclass']
         );
 
-        $this->assertSame('<div data-controller="hecht-a--ux-echarts--echarts" data-hecht-a--ux-echarts--echarts-view-value="{&quot;options&quot;:{&quot;xAxis&quot;:{&quot;type&quot;:&quot;category&quot;,&quot;data&quot;:[&quot;Mon&quot;,&quot;Tue&quot;,&quot;Wed&quot;,&quot;Thu&quot;,&quot;Fri&quot;,&quot;Sat&quot;,&quot;Sun&quot;]},&quot;yAxis&quot;:{&quot;type&quot;:&quot;value&quot;},&quot;series&quot;:[{&quot;data&quot;:[150,230,224,218,135,147,260],&quot;type&quot;:&quot;line&quot;}]},&quot;attributes&quot;:{&quot;style&quot;:&quot;width: 800px; height: 400px;&quot;,&quot;data-controller&quot;:&quot;echarts&quot;,&quot;class&quot;:&quot;myclass&quot;},&quot;themes&quot;:[],&quot;currentTheme&quot;:null}" style="width: 800px; height: 400px;" class="myclass"></div>', $rendered);
+        $this->assertSame('<div style="width: 400px; height: 200px" data-controller="hecht-a--ux-echarts--echarts" data-hecht-a--ux-echarts--echarts-view-value="{&quot;options&quot;:{&quot;xAxis&quot;:{&quot;type&quot;:&quot;category&quot;,&quot;data&quot;:[&quot;Mon&quot;,&quot;Tue&quot;,&quot;Wed&quot;,&quot;Thu&quot;,&quot;Fri&quot;,&quot;Sat&quot;,&quot;Sun&quot;]},&quot;yAxis&quot;:{&quot;type&quot;:&quot;value&quot;},&quot;series&quot;:[{&quot;data&quot;:[150,230,224,218,135,147,260],&quot;type&quot;:&quot;line&quot;}]},&quot;attributes&quot;:{&quot;data-controller&quot;:&quot;echarts&quot;,&quot;class&quot;:&quot;myclass&quot;},&quot;themes&quot;:[],&quot;currentTheme&quot;:null}" class="myclass"></div>', $rendered);
     }
 }
