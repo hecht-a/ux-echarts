@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace HechtA\UX\ECharts\Twig;
 
 use HechtA\UX\ECharts\Model\ECharts;
@@ -9,8 +11,9 @@ use Twig\TwigFunction;
 
 class ChartExtension extends AbstractExtension
 {
-    public function __construct(private readonly StimulusHelper $stimulus)
-    {
+    public function __construct(
+        private readonly StimulusHelper $stimulus,
+    ) {
     }
 
     public function getFunctions(): array
@@ -20,6 +23,9 @@ class ChartExtension extends AbstractExtension
         ];
     }
 
+    /**
+     * @param array<string, string|bool|int|float> $attributes
+     */
     public function renderECharts(ECharts $chart, array $attributes = []): string
     {
         $chart->setAttributes(array_merge($chart->getAttributes(), $attributes));
@@ -43,7 +49,7 @@ class ChartExtension extends AbstractExtension
             if (true === $value) {
                 $stimulusAttributes->addAttribute($name, $name);
             } elseif (false !== $value) {
-                $stimulusAttributes->addAttribute($name, $value);
+                $stimulusAttributes->addAttribute($name, (string) $value);
             }
         }
 
