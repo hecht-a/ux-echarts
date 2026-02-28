@@ -4,11 +4,15 @@ import {ThemeOption} from "echarts/types/src/util/types";
 
 let isChartInitialized = false;
 
+const registeredThemes = new Set<string>();
+
+type Themes = Record<string, ThemeOption>;
+
 type Payload = {
   attributes: Partial<HTMLElementTagNameMap['div']>
   currentTheme: string|null
   options: echarts.EChartsCoreOption
-  themes: ThemeOption
+  themes: Themes
 }
 
 export default class EChartsController extends Controller {
@@ -36,9 +40,12 @@ export default class EChartsController extends Controller {
 
     const payload = this.viewValue
 
-    const themes = payload.themes;
+    const themes = payload.themes ?? {};
     for (const [themeName, theme] of Object.entries(themes)) {
-      echarts.registerTheme(themeName, theme)
+      if (!registeredThemes.has(themeName)) {
+        echarts.registerTheme(themeName, theme)
+        registeredThemes.add(themeName)
+      }
     }
 
     this.dispatchEvent('pre-connect', {
@@ -50,7 +57,8 @@ export default class EChartsController extends Controller {
     this.chart.setOption(payload.options)
 
     this.dispatchEvent('connect', {
-      chart: this.chart
+      chart: this.chart,
+      echarts
     })
   }
 
@@ -60,7 +68,7 @@ export default class EChartsController extends Controller {
     })
 
     if (this.chart) {
-      this.chart.clear()
+      this.chart.dispose()
       this.chart = null
     }
   }

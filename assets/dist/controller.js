@@ -1,12 +1,14 @@
 import { Controller } from "@hotwired/stimulus";
 import * as echarts from 'echarts';
 let isChartInitialized = false;
+const registeredThemes = new Set();
 class EChartsController extends Controller {
     constructor() {
         super(...arguments);
         this.chart = null;
     }
     connect() {
+        var _a;
         if (!isChartInitialized) {
             isChartInitialized = true;
             this.dispatchEvent('init', {
@@ -18,9 +20,12 @@ class EChartsController extends Controller {
             throw new Error('Invalid element');
         }
         const payload = this.viewValue;
-        const themes = payload.themes;
+        const themes = (_a = payload.themes) !== null && _a !== void 0 ? _a : {};
         for (const [themeName, theme] of Object.entries(themes)) {
-            echarts.registerTheme(themeName, theme);
+            if (!registeredThemes.has(themeName)) {
+                echarts.registerTheme(themeName, theme);
+                registeredThemes.add(themeName);
+            }
         }
         this.dispatchEvent('pre-connect', {
             options: payload.options,
@@ -29,7 +34,8 @@ class EChartsController extends Controller {
         this.chart = echarts.init(element, payload.currentTheme);
         this.chart.setOption(payload.options);
         this.dispatchEvent('connect', {
-            chart: this.chart
+            chart: this.chart,
+            echarts
         });
     }
     disconnect() {
@@ -37,7 +43,7 @@ class EChartsController extends Controller {
             chart: this.chart
         });
         if (this.chart) {
-            this.chart.clear();
+            this.chart.dispose();
             this.chart = null;
         }
     }
