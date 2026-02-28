@@ -3,3 +3,7 @@ vendor
 .phpunit.result.cache
 var
 .idea
+.castor
+.castor.stub.php
+cache
+.php-cs-fixer.cache
