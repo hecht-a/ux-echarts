@@ -31,9 +31,10 @@
   },
   "require-dev": {
     "symfony/framework-bundle": "^7.0",
-    "symfony/phpunit-bridge": "^7.0",
+    "symfony/phpunit-bridge": "^8.0",
     "symfony/twig-bundle": "^7.0",
-    "symfony/var-dumper": "^7.0"
+    "symfony/var-dumper": "^7.0",
+    "phpunit/phpunit": "^12.5"
   },
   "conflict": {
     "symfony/flex": "<1.13"
