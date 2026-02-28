@@ -2,6 +2,8 @@
 
 namespace HechtA\UX\ECharts\Model;
 
+use HechtA\UX\ECharts\Exception\InvalidArgumentException;
+
 class ECharts
 {
     public const string TYPE_LINE = 'line';
@@ -80,13 +82,16 @@ class ECharts
 
     public function setAttributes(array $attributes): self
     {
-        $this->attributes = $attributes;
+        $this->attributes = array_merge($this->attributes, $attributes);
 
         return $this;
     }
 
     public function setWidth(int $width): self
     {
+        if ($width <= 0) {
+            throw new InvalidArgumentException(sprintf('Width must be a positive integer, %d given.', $width));
+        }
         $this->width = $width;
 
         return $this;
@@ -94,6 +99,9 @@ class ECharts
 
     public function setHeight(int $height): self
     {
+        if ($height <= 0) {
+            throw new InvalidArgumentException(sprintf('Height must be a positive integer, %d given.', $height));
+        }
         $this->height = $height;
 
         return $this;
