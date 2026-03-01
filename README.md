@@ -215,6 +215,53 @@ document.addEventListener('echarts:connect', ({detail}) => {
 
 ---
 
+## Pre-configured charts with `#[AsEChart]`
+
+For charts reused across multiple controllers, define them as dedicated classes instead of building them inline.
+
+Create a class that extends `AbstractEChart` and implements `configure()`:
+
+```php
+use HechtA\UX\ECharts\Attribute\AsEChart;
+use HechtA\UX\ECharts\Chart\AbstractEChart;
+use HechtA\UX\ECharts\Model\ECharts;
+
+#[AsEChart(id: 'weekly_sales')]
+class WeeklySalesChart extends AbstractEChart
+{
+    public function configure(ECharts $chart): void
+    {
+        $chart
+            ->setHeight(400)
+            ->setOptions([
+                'xAxis' => ['type' => 'category', 'data' => ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun']],
+                'yAxis' => ['type' => 'value'],
+            ])
+            ->addSerie([
+                'type' => ECharts::TYPE_LINE,
+                'data' => [150, 230, 224, 218, 135, 147, 260],
+            ]);
+    }
+}
+```
+
+The class is automatically discovered by the container and can be injected directly into any controller action:
+
+```php
+public function index(WeeklySalesChart $chart): Response
+{
+    return $this->render('index.html.twig', ['chart' => $chart->get()]);
+}
+```
+
+```twig
+{{ render_echarts(chart) }}
+```
+
+The chart instance is lazy — `configure()` is called only when `get()` is first invoked.
+
+---
+
 ## Symfony Profiler
 
 When the Symfony Profiler is enabled, an **ECharts panel** is added automatically to the toolbar. No configuration
