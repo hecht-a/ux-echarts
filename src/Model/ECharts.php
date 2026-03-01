@@ -143,6 +143,29 @@ class ECharts
     }
 
     /**
+     * @param array<string, mixed> $toolboxOptions
+     *
+     * @see https://echarts.apache.org/en/option.html#toolbox
+     */
+    public function exportable(array $toolboxOptions = []): self
+    {
+        $defaults = [
+            'show' => true,
+            'feature' => [
+                'saveAsImage' => ['type' => 'png', 'title' => 'Save as PNG'],
+                'dataView' => ['show' => true, 'readOnly' => false, 'title' => 'Data view'],
+                'dataZoom' => ['show' => true],
+                'restore' => ['show' => true, 'title' => 'Restore'],
+                'magicType' => ['show' => true],
+            ],
+        ];
+
+        $this->options['toolbox'] = array_replace_recursive($defaults, $toolboxOptions);
+
+        return $this;
+    }
+
+    /**
      * @return array<string, mixed>
      */
     public function createView(): array
