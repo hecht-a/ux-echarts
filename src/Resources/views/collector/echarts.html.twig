@@ -1,0 +1,114 @@
+{% extends '@WebProfiler/Profiler/layout.html.twig' %}
+
+{% block toolbar %}
+    {% set icon %}
+        {{ source('@ECharts/collector/icon.svg') }}
+        <span class="sf-toolbar-value">{{ collector.chartCount }}</span>
+    {% endset %}
+
+    {% set text %}
+        <div class="sf-toolbar-info-piece">
+            <b>Charts rendered</b>
+            <span>{{ collector.chartCount }}</span>
+        </div>
+    {% endset %}
+
+    {{ include('@WebProfiler/Profiler/toolbar_item.html.twig', {
+        link: profiler_url,
+        icon: icon
+    }) }}
+{% endblock %}
+
+{% block menu %}
+    <span class="label">
+        <span class="icon">
+            {{ source('@ECharts/collector/icon.svg') }}
+        </span>
+        <strong>ECharts</strong>
+        {% if collector.chartCount > 0 %}
+            <span class="count">
+                <span>{{ collector.chartCount }}</span>
+            </span>
+        {% endif %}
+    </span>
+{% endblock %}
+
+{% block panel %}
+    <h2>ECharts</h2>
+
+    {% if collector.charts is empty %}
+        <div class="empty">
+            <p>No charts were rendered on this request.</p>
+        </div>
+    {% else %}
+        <div class="sf-tabs">
+            {% for chart in collector.charts %}
+                <div class="tab">
+                    <input type="radio" id="tab-chart-{{ loop.index }}" name="tabgroup" {% if loop.first %}checked{% endif %}>
+                    <label for="tab-chart-{{ loop.index }}">
+                        {{ chart.id }}
+                        <span class="badge">{{ chart.series_count }} serie{{ chart.series_count != 1 ? 's' }}</span>
+                    </label>
+                    <div class="tab-content">
+
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Property</th>
+                                    <th>Value</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>ID</td>
+                                    <td><code>{{ chart.id }}</code></td>
+                                </tr>
+                                <tr>
+                                    <td>Series</td>
+                                    <td>{{ chart.series_count }}</td>
+                                </tr>
+                                <tr>
+                                    <td>Theme</td>
+                                    <td>{{ chart.theme ?? '<em>default</em>'|raw }}</td>
+                                </tr>
+                                <tr>
+                                    <td>Dimensions</td>
+                                    <td>
+                                        {% if chart.resizable %}
+                                            100% × {{ chart.height }}px <span class="badge badge-success">resizable</span>
+                                        {% else %}
+                                            {{ chart.width }}px × {{ chart.height }}px <span class="badge">fixed</span>
+                                        {% endif %}
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>Export toolbox</td>
+                                    <td>
+                                        {% if chart.exportable %}
+                                            <span class="badge badge-success">enabled</span>
+                                        {% else %}
+                                            <span class="badge">disabled</span>
+                                        {% endif %}
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+
+                        <h3>Options JSON</h3>
+                        <div class="code-block">
+                            <pre style="
+white-space:pre-wrap;
+overflow:auto;
+max-height:300px;
+background:#18171b;
+color:#d7dae0;
+padding:10px;
+border-radius:6px;
+">{{ chart.options_json }}</pre>
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+    {% endif %}
+{% endblock %}

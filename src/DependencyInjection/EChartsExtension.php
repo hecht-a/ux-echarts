@@ -6,6 +6,7 @@ namespace HechtA\UX\ECharts\DependencyInjection;
 
 use HechtA\UX\ECharts\Builder\EChartsBuilder;
 use HechtA\UX\ECharts\Builder\EChartsBuilderInterface;
+use HechtA\UX\ECharts\DataCollector\EChartsDataCollector;
 use HechtA\UX\ECharts\Twig\ChartExtension;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Definition;
@@ -26,9 +27,21 @@ class EChartsExtension extends Extension
             ->setPublic(false)
         ;
 
+        $collectorDefinition = new Definition(EChartsDataCollector::class);
+        $collectorDefinition
+            ->addTag('data_collector', [
+                'template' => '@ECharts/collector/echarts.html.twig',
+                'id' => 'echarts',
+            ])
+            ->setPublic(false)
+        ;
+        $container->setDefinition('echarts.data_collector', $collectorDefinition);
+        $container->setAlias(EChartsDataCollector::class, 'echarts.data_collector')->setPublic(false);
+
         $container
             ->setDefinition('echarts.twig_extension', new Definition(ChartExtension::class))
             ->addArgument(new Reference('stimulus.helper'))
+            ->addArgument(new Reference('echarts.data_collector'))
             ->addTag('twig.extension')
             ->setPublic(false)
         ;
