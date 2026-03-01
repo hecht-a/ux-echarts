@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace HechtA\UX\ECharts\Twig;
 
+use HechtA\UX\ECharts\DataCollector\EChartsDataCollector;
 use HechtA\UX\ECharts\Model\ECharts;
 use Symfony\UX\StimulusBundle\Helper\StimulusHelper;
 use Twig\Extension\AbstractExtension;
@@ -13,6 +14,7 @@ class ChartExtension extends AbstractExtension
 {
     public function __construct(
         private readonly StimulusHelper $stimulus,
+        private readonly ?EChartsDataCollector $dataCollector = null,
     ) {
     }
 
@@ -29,6 +31,8 @@ class ChartExtension extends AbstractExtension
     public function renderECharts(ECharts $chart, array $attributes = []): string
     {
         $chart->setAttributes($attributes);
+
+        $this->dataCollector?->record($chart);
 
         $controllers = [];
         if ($chart->getDataController()) {

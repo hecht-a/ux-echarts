@@ -53,6 +53,11 @@ class ECharts
         return $this;
     }
 
+    public function getTheme(): ?string
+    {
+        return $this->currentTheme;
+    }
+
     /**
      * @param array<string, mixed> $serie
      */
@@ -71,6 +76,14 @@ class ECharts
         $this->series = $series;
 
         return $this;
+    }
+
+    /**
+     * @return array<string|int, mixed>
+     */
+    public function getSeries(): array
+    {
+        return $this->series;
     }
 
     /**
