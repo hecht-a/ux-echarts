@@ -8,6 +8,7 @@ use HechtA\UX\ECharts\Builder\EChartsBuilderInterface;
 use HechtA\UX\ECharts\Exception\InvalidArgumentException;
 use HechtA\UX\ECharts\Factory\EChartsFactoryInterface;
 use HechtA\UX\ECharts\Model\ECharts;
+use HechtA\UX\ECharts\Option\Toolbox;
 use HechtA\UX\ECharts\Tests\Kernel\TwigAppKernel;
 use HechtA\UX\ECharts\Twig\ChartExtension;
 use PHPUnit\Framework\TestCase;
@@ -202,14 +203,21 @@ class EChartsBundleTest extends TestCase
         $this->assertArrayHasKey('restore', $options['toolbox']['feature']);
     }
 
-    public function testExportableCanBeOverridden(): void
+    public function testExportableWithCustomToolbox(): void
     {
         $chart = $this->builder->createECharts();
-        $chart->exportable(['feature' => ['saveAsImage' => ['type' => 'svg']]]);
+        $chart->exportable(
+            (new Toolbox())
+                ->saveAsImage('svg')
+                ->dataView(readOnly: true)
+                ->restore()
+        );
 
-        $this->assertSame('svg', $chart->getOptions()['toolbox']['feature']['saveAsImage']['type']);
-        // Other defaults are preserved
-        $this->assertArrayHasKey('restore', $chart->getOptions()['toolbox']['feature']);
+        $toolbox = $chart->getOptions()['toolbox'];
+        $this->assertSame('svg', $toolbox['feature']['saveAsImage']['type']);
+        $this->assertTrue($toolbox['feature']['dataView']['readOnly']);
+        $this->assertArrayHasKey('restore', $toolbox['feature']);
+        $this->assertArrayNotHasKey('magicType', $toolbox['feature']);
     }
 
     public function testFactoryIsAccessibleFromBuilder(): void

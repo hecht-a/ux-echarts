@@ -6,6 +6,7 @@ namespace HechtA\UX\ECharts\Model;
 
 use HechtA\UX\ECharts\Exception\InvalidArgumentException;
 use HechtA\UX\ECharts\Option\Options;
+use HechtA\UX\ECharts\Option\Toolbox;
 use HechtA\UX\ECharts\Serie\Serie;
 
 class ECharts
@@ -172,25 +173,9 @@ class ECharts
         return $this->resizable;
     }
 
-    /**
-     * @param array<string, mixed> $toolboxOptions
-     *
-     * @see https://echarts.apache.org/en/option.html#toolbox
-     */
-    public function exportable(array $toolboxOptions = []): self
+    public function exportable(?Toolbox $toolbox = null): self
     {
-        $defaults = [
-            'show' => true,
-            'feature' => [
-                'saveAsImage' => ['type' => 'png', 'title' => 'Save as PNG'],
-                'dataView' => ['show' => true, 'readOnly' => false, 'title' => 'Data view'],
-                'dataZoom' => ['show' => true],
-                'restore' => ['show' => true, 'title' => 'Restore'],
-                'magicType' => ['show' => true],
-            ],
-        ];
-
-        $this->options['toolbox'] = array_replace_recursive($defaults, $toolboxOptions);
+        $this->options['toolbox'] = ($toolbox ?? Toolbox::default())->toArray();
 
         return $this;
     }

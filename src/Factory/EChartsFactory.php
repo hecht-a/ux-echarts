@@ -6,6 +6,13 @@ namespace HechtA\UX\ECharts\Factory;
 
 use HechtA\UX\ECharts\Builder\EChartsBuilderInterface;
 use HechtA\UX\ECharts\Model\ECharts;
+use HechtA\UX\ECharts\Option\Options;
+use HechtA\UX\ECharts\Option\XAxis;
+use HechtA\UX\ECharts\Option\YAxis;
+use HechtA\UX\ECharts\Serie\BarSerie;
+use HechtA\UX\ECharts\Serie\LineSerie;
+use HechtA\UX\ECharts\Serie\PieSerie;
+use HechtA\UX\ECharts\Serie\RadarSerie;
 
 final readonly class EChartsFactory implements EChartsFactoryInterface
 {
@@ -23,15 +30,22 @@ final readonly class EChartsFactory implements EChartsFactoryInterface
     ): ECharts {
         $chart = $this->builder->createECharts($id);
 
-        $chart->setRawOptions(array_merge([
-            'xAxis' => ['type' => 'category', 'data' => $xAxis],
-            'yAxis' => ['type' => 'value'],
-        ], $chartOptions));
+        $chart->setOptions(
+            (new Options())
+                ->xAxis(new XAxis(data: $xAxis))
+                ->yAxis(new YAxis())
+        );
 
-        $chart->addSerie(array_merge([
-            'type' => ECharts::TYPE_LINE,
-            'data' => $data,
-        ], $serieOptions));
+        if ($chartOptions !== []) {
+            $chart->setRawOptions($chartOptions);
+        }
+
+        $serie = LineSerie::new()->data($data);
+        foreach ($serieOptions as $key => $value) {
+            $serie->set($key, $value);
+        }
+
+        $chart->addSerie($serie);
 
         return $chart;
     }
@@ -45,15 +59,22 @@ final readonly class EChartsFactory implements EChartsFactoryInterface
     ): ECharts {
         $chart = $this->builder->createECharts($id);
 
-        $chart->setRawOptions(array_merge([
-            'xAxis' => ['type' => 'category', 'data' => $xAxis],
-            'yAxis' => ['type' => 'value'],
-        ], $chartOptions));
+        $options = (new Options())
+            ->xAxis(new XAxis(data: $xAxis))
+            ->yAxis(new YAxis());
 
-        $chart->addSerie(array_merge([
-            'type' => ECharts::TYPE_BAR,
-            'data' => $data,
-        ], $serieOptions));
+        $chart->setOptions($options);
+
+        if ($chartOptions !== []) {
+            $chart->setRawOptions($chartOptions);
+        }
+
+        $serie = BarSerie::new()->data($data);
+        foreach ($serieOptions as $key => $value) {
+            $serie->set($key, $value);
+        }
+
+        $chart->addSerie($serie);
 
         return $chart;
     }
@@ -70,16 +91,12 @@ final readonly class EChartsFactory implements EChartsFactoryInterface
             $chart->setRawOptions($chartOptions);
         }
 
-        $formattedData = array_map(
-            static fn (string $name, int|float $value): array => ['name' => $name, 'value' => $value],
-            array_keys($data),
-            array_values($data),
-        );
+        $serie = PieSerie::new()->data($data);
+        foreach ($serieOptions as $key => $value) {
+            $serie->set($key, $value);
+        }
 
-        $chart->addSerie(array_merge([
-            'type' => ECharts::TYPE_PIE,
-            'data' => $formattedData,
-        ], $serieOptions));
+        $chart->addSerie($serie);
 
         return $chart;
     }
@@ -98,20 +115,17 @@ final readonly class EChartsFactory implements EChartsFactoryInterface
             $indicators,
         );
 
-        $chart->setRawOptions(array_merge([
-            'radar' => ['indicator' => $formattedIndicators],
-        ], $chartOptions));
+        $chart->setRawOptions(array_merge(
+            ['radar' => ['indicator' => $formattedIndicators]],
+            $chartOptions,
+        ));
 
-        $formattedData = array_map(
-            static fn (string $name, array $values): array => ['name' => $name, 'value' => $values],
-            array_keys($data),
-            array_values($data),
-        );
+        $serie = RadarSerie::new()->data($data);
+        foreach ($serieOptions as $key => $value) {
+            $serie->set($key, $value);
+        }
 
-        $chart->addSerie(array_merge([
-            'type' => ECharts::TYPE_RADAR,
-            'data' => $formattedData,
-        ], $serieOptions));
+        $chart->addSerie($serie);
 
         return $chart;
     }

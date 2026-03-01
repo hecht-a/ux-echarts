@@ -304,22 +304,42 @@ $chart->setResizable(false)->setWidth(800);
 
 ## Export
 
-`exportable()` adds the ECharts toolbox with PNG export, data view (CSV), and a restore button:
+`exportable()` adds the ECharts toolbox to the chart. Without argument it enables PNG export, data view (CSV) and
+restore by default:
 
 ```php
 $chart->exportable();
 ```
 
-You can override any toolbox option — unspecified defaults are preserved:
+Pass a `Toolbox` object to control exactly which features are enabled:
 
 ```php
-$chart->exportable([
-    'feature' => [
-        'saveAsImage' => ['type' => 'svg', 'title' => 'Export SVG'],
-        'dataView'    => ['readOnly' => true],
-    ],
-]);
+use HechtA\UX\ECharts\Option\Toolbox;
+
+$chart->exportable(
+    (new Toolbox())
+        ->saveAsImage('svg', 'Export SVG')   // PNG (default) or SVG
+        ->dataView(readOnly: true)            // show raw data, read-only
+        ->restore()                           // reset to initial state
+        ->dataZoom()                          // region zoom button
+        ->magicType(['line', 'bar'])          // switch chart type at runtime
+        ->left('right')                       // toolbox position
+        ->top('top')
+);
 ```
+
+Available `Toolbox` methods:
+
+| Method                      | Description                                      |
+|-----------------------------|--------------------------------------------------|
+| `saveAsImage(type, title)`  | PNG (default) or SVG export button               |
+| `dataView(readOnly, title)` | Raw data view, exportable as CSV                 |
+| `restore(title)`            | Reset chart to its initial state                 |
+| `dataZoom(title)`           | Region selection zoom                            |
+| `magicType(types)`          | Switch between `line`, `bar`, `stack` at runtime |
+| `left(string)`              | Horizontal position of the toolbox               |
+| `top(string)`               | Vertical position of the toolbox                 |
+| `show(bool)`                | Show or hide the entire toolbox                  |
 
 ---
 
@@ -451,22 +471,22 @@ it is never instantiated and has no runtime cost.
 
 ### `ECharts`
 
-| Method                       | Description                                                          |
-|------------------------------|----------------------------------------------------------------------|
-| `createECharts(?string $id)` | Creates a new chart instance                                         |
-| `factory()`                  | Returns the `EChartsFactory` for shorthand chart creation            |
-| `setOptions(Options)`        | Merges options from an `Options` object                              |
-| `setRawOptions(array)`       | Merges raw array options — for options not covered by the fluent API |
-| `addSerie(Serie\|array)`     | Appends a serie — accepts a `Serie` object or a raw array            |
-| `setSeries(array)`           | Replaces all series                                                  |
-| `addTheme(string, array)`    | Registers a custom ECharts theme                                     |
-| `useTheme(string)`           | Sets the active theme                                                |
-| `setWidth(int)`              | Fixed width in px (ignored when resizable)                           |
-| `setHeight(int)`             | Height in px                                                         |
-| `setResizable(bool)`         | Enables/disables responsive resize — enabled by default              |
-| `exportable(array)`          | Adds the toolbox with PNG, data view and restore                     |
-| `setAttributes(array)`       | Merges HTML attributes on the container `<div>`                      |
-| `createView()`               | Returns the full payload injected into Stimulus                      |
+| Method                       | Description                                                              |
+|------------------------------|--------------------------------------------------------------------------|
+| `createECharts(?string $id)` | Creates a new chart instance                                             |
+| `factory()`                  | Returns the `EChartsFactory` for shorthand chart creation                |
+| `setOptions(Options)`        | Merges options from an `Options` object                                  |
+| `setRawOptions(array)`       | Merges raw array options — for options not covered by the fluent API     |
+| `addSerie(Serie\|array)`     | Appends a serie — accepts a `Serie` object or a raw array                |
+| `setSeries(array)`           | Replaces all series                                                      |
+| `addTheme(string, array)`    | Registers a custom ECharts theme                                         |
+| `useTheme(string)`           | Sets the active theme                                                    |
+| `setWidth(int)`              | Fixed width in px (ignored when resizable)                               |
+| `setHeight(int)`             | Height in px                                                             |
+| `setResizable(bool)`         | Enables/disables responsive resize — enabled by default                  |
+| `exportable(?Toolbox)`       | Adds the toolbox — defaults to PNG, data view and restore if no argument |
+| `setAttributes(array)`       | Merges HTML attributes on the container `<div>`                          |
+| `createView()`               | Returns the full payload injected into Stimulus                          |
 
 ### `Options`
 
