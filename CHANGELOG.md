@@ -7,6 +7,31 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ---
 
+## [1.5.0] — 2026-03-01
+
+### Added
+
+#### `#[AsEChart]` attribute (`bc1e10a`)
+- `#[AsEChart(id: '...')]` marks a class as a pre-configured chart, auto-discovered by the container
+- `EChartInterface` — contract with `configure(ECharts $chart)` and `get()`
+- `AbstractEChart` — base class with lazy init, extend and implement `configure()` to define the chart
+- `EChartsRegistry` — holds all registered charts, accessible by id or class name
+- `EChartValueResolver` — injects `#[AsEChart]` classes directly into controller action arguments by type-hint
+
+#### Symfony Profiler (`7689891`)
+- `EChartsDataCollector` added — collects data for every chart rendered via `render_echarts()` on the request
+- Profiler panel shows per chart: id, number of series, active theme, dimensions, export toolbox status, and full options JSON
+- Collector injected as optional dependency in `ChartExtension` — no runtime cost when profiler is disabled
+
+### Changed
+
+- `ECharts::getSeries()` getter added to expose series without going through `createView()` (`7689891`)
+- `ECharts::getTheme()` getter added (`7689891`)
+- Test suite extended with 34 new cases covering `AsEChart`, `AbstractEChart`, `EChartsRegistry`, `EChartValueResolver` and `EChartsDataCollector` (`bc1e10a`, `7689891`)
+- README updated with `#[AsEChart]` usage and Profiler panel documentation (`bc1e10a`, `7689891`)
+
+---
+
 ## [1.4.0] — 2026-03-01
 
 ### Added
