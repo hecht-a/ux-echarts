@@ -7,6 +7,34 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ---
 
+## [1.4.0] — 2026-03-01
+
+### Added
+
+#### EChartsFactory (`c17dffd`)
+- `$builder->factory()` returns an `EChartsFactory` instance (lazy, single instance per builder)
+- `factory()->line(data, xAxis, serieOptions, chartOptions)` — creates a line chart
+- `factory()->bar(data, xAxis, serieOptions, chartOptions)` — creates a bar chart
+- `factory()->pie(data, serieOptions, chartOptions)` — creates a pie chart, accepts `label => value` array
+- `factory()->radar(data, indicators, serieOptions, chartOptions)` — creates a radar chart
+- `EChartsFactoryInterface` added for custom implementations
+
+#### Responsive resize (`2ecf806`)
+- Charts resize automatically when their container changes size via `ResizeObserver`
+- Enabled by default — rendered `<div>` uses `width: 100%` to adapt to the parent
+- `setResizable(false)` opts out and renders with a fixed pixel width instead
+
+#### Export toolbox (`7fea1b7`)
+- `exportable(array $toolboxOptions = [])` adds the ECharts toolbox with PNG export, data view (CSV) and restore button
+- Toolbox options are deeply merged with defaults via `array_replace_recursive`, unspecified defaults are preserved
+
+### Changed
+
+- Test suite extended from 11 to 25 cases, organized by feature section (`2510016`)
+- README rewritten in English with usage examples for all features (`6dd1cb7`)
+
+---
+
 ## [1.3.0] — 2026-02-28
 
 ### Added
