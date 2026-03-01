@@ -5,6 +5,8 @@ declare(strict_types=1);
 namespace HechtA\UX\ECharts\Model;
 
 use HechtA\UX\ECharts\Exception\InvalidArgumentException;
+use HechtA\UX\ECharts\Option\Options;
+use HechtA\UX\ECharts\Serie\Serie;
 
 class ECharts
 {
@@ -59,21 +61,26 @@ class ECharts
     }
 
     /**
-     * @param array<string, mixed> $serie
+     * @param Serie|array<string, mixed> $serie
      */
-    public function addSerie(array $serie): self
+    public function addSerie(Serie|array $serie): self
     {
-        $this->series[] = $serie;
+        $this->series[] = $serie instanceof Serie ? $serie->toArray() : $serie;
 
         return $this;
     }
 
     /**
-     * @param array<string, mixed> $series
+     * @param (Serie|array<string, mixed>)[] $series
      */
     public function setSeries(array $series): self
     {
-        $this->series = $series;
+        $this->series = array_map(
+            fn (Serie|array $serie): array => $serie instanceof Serie
+                ? $serie->toArray()
+                : $serie,
+            $series,
+        );
 
         return $this;
     }
@@ -102,11 +109,21 @@ class ECharts
      *      ]]);
      * </code>
      *
+     * @return $this
+     */
+    public function setOptions(Options $options): self
+    {
+        $this->options = array_merge($this->options, $options->toArray());
+
+        return $this;
+    }
+
+    /**
      * @param array<string, mixed> $options
      *
      * @return $this
      */
-    public function setOptions(array $options): self
+    public function setRawOptions(array $options): self
     {
         $this->options = array_merge($this->options, $options);
 

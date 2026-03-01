@@ -23,7 +23,7 @@ final readonly class EChartsFactory implements EChartsFactoryInterface
     ): ECharts {
         $chart = $this->builder->createECharts($id);
 
-        $chart->setOptions(array_merge([
+        $chart->setRawOptions(array_merge([
             'xAxis' => ['type' => 'category', 'data' => $xAxis],
             'yAxis' => ['type' => 'value'],
         ], $chartOptions));
@@ -45,7 +45,7 @@ final readonly class EChartsFactory implements EChartsFactoryInterface
     ): ECharts {
         $chart = $this->builder->createECharts($id);
 
-        $chart->setOptions(array_merge([
+        $chart->setRawOptions(array_merge([
             'xAxis' => ['type' => 'category', 'data' => $xAxis],
             'yAxis' => ['type' => 'value'],
         ], $chartOptions));
@@ -67,7 +67,7 @@ final readonly class EChartsFactory implements EChartsFactoryInterface
         $chart = $this->builder->createECharts($id);
 
         if ($chartOptions !== []) {
-            $chart->setOptions($chartOptions);
+            $chart->setRawOptions($chartOptions);
         }
 
         $formattedData = array_map(
@@ -98,7 +98,7 @@ final readonly class EChartsFactory implements EChartsFactoryInterface
             $indicators,
         );
 
-        $chart->setOptions(array_merge([
+        $chart->setRawOptions(array_merge([
             'radar' => ['indicator' => $formattedIndicators],
         ], $chartOptions));
 
