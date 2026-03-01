@@ -7,6 +7,42 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ---
 
+## [2.0.0] — 2026-03-01
+
+### Breaking changes
+
+- `ECharts::setOptions(array)` removed — replaced by `setOptions(Options)` which accepts an `Options` object (`367c785`)
+- `ECharts::addSerie(array)` and `setSeries(array)` still accept raw arrays but now also accept `Serie` objects — no action needed unless you relied on the exact method signature for static analysis
+- `PieSerie::data()` and `RadarSerie::data()` now expect an associative array (`label => value` and `name => values` respectively) instead of a pre-formatted ECharts array
+
+### Added
+
+#### Options fluent API (`367c785`)
+- `Options` — fluent aggregator for all chart-level options, replaces raw arrays passed to `setOptions()`
+- `Title` — full ECharts title option with `text()`, `subtext()`, `link()`, `left()`, `top()`, `backgroundColor()`, `borderWidth()`, `padding()`, `itemGap()`, `textStyle()`, `subtextStyle()`, `show()`, and more
+- `Tooltip` — `trigger()`, `formatter()`, `axisPointer()`
+- `Legend` — `data()`, `orient()`, `left()`, `top()`
+- `Grid` — `left()`, `right()`, `top()`, `bottom()`, `containLabel()`
+- `XAxis` — `type()`, `data()`, `name()`, `boundaryGap()`
+- `YAxis` — `type()`, `name()`, `min()`, `max()`
+- `Option` — base class usable directly for options without a dedicated class; accepted by `Options::set()`
+
+#### Series fluent API (`367c785`)
+- `LineSerie` — `smooth()`, `stack()`, `areaStyle()`, `step()`
+- `BarSerie` — `stack()`, `barWidth()`, `barMaxWidth()`
+- `PieSerie` — `data(label => value)`, `radius()`, `center()`, `roseType()`
+- `RadarSerie` — `data(name => values)`
+- All series share `name()`, `data()`, `set()` from the base `Serie` class
+
+### Changed
+
+- `ECharts::setRawOptions(array)` added as the explicit escape hatch for raw array options (`367c785`)
+- `ECharts::addSerie()` and `setSeries()` now accept `Serie|array` — `Serie` objects are automatically converted via `toArray()` (`367c785`)
+- Test suite extended with 66 new cases covering all `Option` and `Serie` classes (`367c785`)
+- README updated with full Options and Series API documentation (`367c785`)
+
+---
+
 ## [1.5.0] — 2026-03-01
 
 ### Added
