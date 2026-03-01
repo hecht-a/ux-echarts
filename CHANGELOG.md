@@ -7,6 +7,21 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ---
 
+## [2.1.0] — 2026-03-01
+
+### Added
+
+- `Toolbox` option class — fluent API for the ECharts toolbox with `saveAsImage()`, `dataView()`, `restore()`, `dataZoom()`, `magicType()`, `left()`, `top()`, `show()` (`edebf86`)
+- `Toolbox::default()` static constructor — activates PNG export, data view and restore in one call (`edebf86`)
+
+### Changed
+
+- `ECharts::exportable()` now accepts `?Toolbox` instead of `array` — pass a `Toolbox` object to customize features, or no argument to use the defaults (`edebf86`)
+- `EChartsFactory` migrated internally to use `LineSerie`, `BarSerie`, `PieSerie`, `RadarSerie`, `Options`, `XAxis` and `YAxis` instead of raw arrays (`edebf86`)
+- README updated with `Toolbox` usage and methods table (`edebf86`)
+
+---
+
 ## [2.0.0] — 2026-03-01
 
 ### Breaking changes
