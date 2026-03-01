@@ -46,7 +46,7 @@ class EChartsBundleTest extends TestCase
             ->addSerie(['data' => [150, 230, 224, 218, 135, 147, 260], 'type' => 'line'])
             ->setWidth(400)
             ->setHeight(200)
-            ->setOptions([
+            ->setRawOptions([
                 'xAxis' => ['type' => 'category', 'data' => ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun']],
                 'yAxis' => ['type' => 'value'],
             ]);
@@ -144,8 +144,8 @@ class EChartsBundleTest extends TestCase
     public function testSetOptionsAreMerged(): void
     {
         $chart = $this->builder->createECharts();
-        $chart->setOptions(['title' => ['text' => 'Hello']]);
-        $chart->setOptions(['xAxis' => ['type' => 'category']]);
+        $chart->setRawOptions(['title' => ['text' => 'Hello']]);
+        $chart->setRawOptions(['xAxis' => ['type' => 'category']]);
 
         $this->assertArrayHasKey('title', $chart->getOptions());
         $this->assertArrayHasKey('xAxis', $chart->getOptions());

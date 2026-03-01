@@ -123,7 +123,7 @@ class EChartsDataCollectorTest extends TestCase
     public function testRecordStoresOptionsJson(): void
     {
         $chart = new ECharts();
-        $chart->setOptions(['title' => ['text' => 'Hello']]);
+        $chart->setRawOptions(['title' => ['text' => 'Hello']]);
 
         $this->collector->record($chart);
 
