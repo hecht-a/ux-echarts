@@ -24,6 +24,7 @@ class ECharts
     private ?string $currentTheme = null;
     private int $width = 800;
     private int $height = 400;
+    private bool $resizable = true;
 
     public function __construct(
         private readonly ?string $id = null,
@@ -129,6 +130,18 @@ class ECharts
         return $this;
     }
 
+    public function setResizable(bool $resizable): self
+    {
+        $this->resizable = $resizable;
+
+        return $this;
+    }
+
+    public function isResizable(): bool
+    {
+        return $this->resizable;
+    }
+
     /**
      * @return array<string, mixed>
      */
@@ -139,6 +152,7 @@ class ECharts
             'attributes' => $this->attributes,
             'themes' => $this->themes,
             'currentTheme' => $this->currentTheme,
+            'resizable' => $this->resizable,
         ];
     }
 

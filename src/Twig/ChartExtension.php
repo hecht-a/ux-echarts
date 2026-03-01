@@ -53,7 +53,7 @@ class ChartExtension extends AbstractExtension
             }
         }
 
-        $width = $chart->getWidth() . 'px';
+        $width = $chart->isResizable() ? '100%' : $chart->getWidth() . 'px';
         $height = $chart->getHeight() . 'px';
 
         return \sprintf('<div style="width: %s; height: %s" %s></div>', $width, $height, $stimulusAttributes);

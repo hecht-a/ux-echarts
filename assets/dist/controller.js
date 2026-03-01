@@ -6,6 +6,7 @@ class EChartsController extends Controller {
     constructor() {
         super(...arguments);
         this.chart = null;
+        this.resizeObserver = null;
     }
     connect() {
         var _a;
@@ -33,15 +34,25 @@ class EChartsController extends Controller {
         });
         this.chart = echarts.init(element, payload.currentTheme);
         this.chart.setOption(payload.options);
+        if (payload.resizable) {
+            this.resizeObserver = new ResizeObserver(() => {
+                var _a;
+                (_a = this.chart) === null || _a === void 0 ? void 0 : _a.resize();
+            });
+            this.resizeObserver.observe(element);
+        }
         this.dispatchEvent('connect', {
             chart: this.chart,
             echarts
         });
     }
     disconnect() {
+        var _a;
         this.dispatchEvent('disconnect', {
             chart: this.chart
         });
+        (_a = this.resizeObserver) === null || _a === void 0 ? void 0 : _a.disconnect();
+        this.resizeObserver = null;
         if (this.chart) {
             this.chart.dispose();
             this.chart = null;

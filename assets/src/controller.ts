@@ -13,6 +13,7 @@ type Payload = {
   currentTheme: string|null
   options: echarts.EChartsCoreOption
   themes: Themes
+  resizable: boolean
 }
 
 export default class EChartsController extends Controller {
@@ -23,6 +24,7 @@ export default class EChartsController extends Controller {
   };
 
   private chart: echarts.EChartsType | null = null;
+  private resizeObserver: ResizeObserver | null = null;
 
   connect() {
     if (!isChartInitialized) {
@@ -56,6 +58,13 @@ export default class EChartsController extends Controller {
     this.chart = echarts.init(element, payload.currentTheme)
     this.chart.setOption(payload.options)
 
+    if (payload.resizable) {
+      this.resizeObserver = new ResizeObserver(() => {
+        this.chart?.resize()
+      })
+      this.resizeObserver.observe(element)
+    }
+
     this.dispatchEvent('connect', {
       chart: this.chart,
       echarts
@@ -66,6 +75,9 @@ export default class EChartsController extends Controller {
     this.dispatchEvent('disconnect', {
       chart: this.chart
     })
+
+    this.resizeObserver?.disconnect()
+    this.resizeObserver = null
 
     if (this.chart) {
       this.chart.dispose()
