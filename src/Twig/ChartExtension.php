@@ -28,7 +28,7 @@ class ChartExtension extends AbstractExtension
      */
     public function renderECharts(ECharts $chart, array $attributes = []): string
     {
-        $chart->setAttributes(array_merge($chart->getAttributes(), $attributes));
+        $chart->setAttributes($attributes);
 
         $controllers = [];
         if ($chart->getDataController()) {

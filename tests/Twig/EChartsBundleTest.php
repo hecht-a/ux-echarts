@@ -6,6 +6,7 @@ namespace HechtA\UX\ECharts\Tests\Twig;
 
 use HechtA\UX\ECharts\Builder\EChartsBuilderInterface;
 use HechtA\UX\ECharts\Exception\InvalidArgumentException;
+use HechtA\UX\ECharts\Factory\EChartsFactoryInterface;
 use HechtA\UX\ECharts\Model\ECharts;
 use HechtA\UX\ECharts\Tests\Kernel\TwigAppKernel;
 use HechtA\UX\ECharts\Twig\ChartExtension;
@@ -15,6 +16,7 @@ class EChartsBundleTest extends TestCase
 {
     private static TwigAppKernel $kernel;
     private EChartsBuilderInterface $builder;
+    private EChartsFactoryInterface $factory;
     private ChartExtension $twigExtension;
 
     public static function setUpBeforeClass(): void
@@ -32,6 +34,7 @@ class EChartsBundleTest extends TestCase
     {
         $container = self::$kernel->getContainer()->get('test.service_container');
         $this->builder = $container->get('test.echarts.builder');
+        $this->factory = $this->builder->factory();
         $this->twigExtension = $container->get('test.echarts.twig_extension');
     }
 
@@ -40,30 +43,29 @@ class EChartsBundleTest extends TestCase
         $chart = $this->builder->createECharts(ECharts::TYPE_LINE);
 
         $chart
-            ->addSerie([
-                'data' => [150, 230, 224, 218, 135, 147, 260],
-                'type' => 'line',
-            ])
+            ->addSerie(['data' => [150, 230, 224, 218, 135, 147, 260], 'type' => 'line'])
             ->setWidth(400)
             ->setHeight(200)
             ->setOptions([
-                'xAxis' => [
-                    'type' => 'category',
-                    'data' => ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'],
-                ],
-                'yAxis' => [
-                    'type' => 'value',
-                ]]);
+                'xAxis' => ['type' => 'category', 'data' => ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun']],
+                'yAxis' => ['type' => 'value'],
+            ]);
 
-        $rendered = $this->twigExtension->renderECharts(
-            $chart,
-            ['data-controller' => 'echarts', 'class' => 'myclass']
-        );
+        $rendered = $this->twigExtension->renderECharts($chart, ['class' => 'myclass']);
 
-        $this->assertStringContainsString('width: 400px', $rendered);
         $this->assertStringContainsString('height: 200px', $rendered);
         $this->assertStringContainsString('class="myclass"', $rendered);
         $this->assertStringContainsString('hecht-a--ux-echarts--echarts', $rendered);
+    }
+
+    public function testRenderWithCustomAttributes(): void
+    {
+        $chart = $this->builder->createECharts();
+        $chart->setAttributes(['id' => 'my-chart', 'class' => 'mb-4']);
+
+        $rendered = $this->twigExtension->renderECharts($chart);
+        $this->assertStringContainsString('id="my-chart"', $rendered);
+        $this->assertStringContainsString('class="mb-4"', $rendered);
     }
 
     public function testSetSeriesReplacesAllSeries(): void
@@ -87,9 +89,8 @@ class EChartsBundleTest extends TestCase
         $chart->setAttributes(['class' => 'first']);
         $chart->setAttributes(['id' => 'my-chart']);
 
-        $attributes = $chart->getAttributes();
-        $this->assertSame('first', $attributes['class']);
-        $this->assertSame('my-chart', $attributes['id']);
+        $this->assertSame('first', $chart->getAttributes()['class']);
+        $this->assertSame('my-chart', $chart->getAttributes()['id']);
     }
 
     public function testSetAttributesOverridesExistingKey(): void
@@ -146,18 +147,139 @@ class EChartsBundleTest extends TestCase
         $chart->setOptions(['title' => ['text' => 'Hello']]);
         $chart->setOptions(['xAxis' => ['type' => 'category']]);
 
-        $options = $chart->getOptions();
-        $this->assertArrayHasKey('title', $options);
-        $this->assertArrayHasKey('xAxis', $options);
+        $this->assertArrayHasKey('title', $chart->getOptions());
+        $this->assertArrayHasKey('xAxis', $chart->getOptions());
     }
 
-    public function testRenderWithCustomAttributes(): void
+    public function testResizableIsEnabledByDefault(): void
     {
         $chart = $this->builder->createECharts();
-        $chart->setAttributes(['id' => 'my-chart', 'class' => 'mb-4']);
+        $this->assertTrue($chart->isResizable());
+    }
 
+    public function testResizableCanBeDisabled(): void
+    {
+        $chart = $this->builder->createECharts();
+        $chart->setResizable(false);
+        $this->assertFalse($chart->isResizable());
+    }
+
+    public function testResizableRendersWidthAs100Percent(): void
+    {
+        $chart = $this->builder->createECharts()->setHeight(300);
         $rendered = $this->twigExtension->renderECharts($chart);
-        $this->assertStringContainsString('id="my-chart"', $rendered);
-        $this->assertStringContainsString('class="mb-4"', $rendered);
+
+        $this->assertStringContainsString('width: 100%', $rendered);
+        $this->assertStringContainsString('height: 300px', $rendered);
+    }
+
+    public function testNonResizableRendersWidthInPx(): void
+    {
+        $chart = $this->builder->createECharts()->setWidth(600)->setHeight(300)->setResizable(false);
+        $rendered = $this->twigExtension->renderECharts($chart);
+
+        $this->assertStringContainsString('width: 600px', $rendered);
+    }
+
+    public function testResizableIsPropagatedToView(): void
+    {
+        $chart = $this->builder->createECharts();
+        $chart->setResizable(false);
+
+        $this->assertFalse($chart->createView()['resizable']);
+    }
+
+    public function testExportableAddsToolbox(): void
+    {
+        $chart = $this->builder->createECharts();
+        $chart->exportable();
+
+        $options = $chart->getOptions();
+        $this->assertArrayHasKey('toolbox', $options);
+        $this->assertTrue($options['toolbox']['show']);
+        $this->assertArrayHasKey('saveAsImage', $options['toolbox']['feature']);
+        $this->assertArrayHasKey('dataView', $options['toolbox']['feature']);
+        $this->assertArrayHasKey('restore', $options['toolbox']['feature']);
+    }
+
+    public function testExportableCanBeOverridden(): void
+    {
+        $chart = $this->builder->createECharts();
+        $chart->exportable(['feature' => ['saveAsImage' => ['type' => 'svg']]]);
+
+        $this->assertSame('svg', $chart->getOptions()['toolbox']['feature']['saveAsImage']['type']);
+        // Other defaults are preserved
+        $this->assertArrayHasKey('restore', $chart->getOptions()['toolbox']['feature']);
+    }
+
+    public function testFactoryIsAccessibleFromBuilder(): void
+    {
+        $this->assertInstanceOf(EChartsFactoryInterface::class, $this->builder->factory());
+    }
+
+    public function testFactoryReturnsSameInstance(): void
+    {
+        $this->assertSame($this->builder->factory(), $this->builder->factory());
+    }
+
+    public function testFactoryCreatesLineChart(): void
+    {
+        $chart = $this->factory->line([10, 20, 30], ['A', 'B', 'C']);
+        $view = $chart->createView();
+
+        $this->assertSame('line', $view['options']['series'][0]['type']);
+        $this->assertSame([10, 20, 30], $view['options']['series'][0]['data']);
+        $this->assertSame(['A', 'B', 'C'], $view['options']['xAxis']['data']);
+    }
+
+    public function testFactoryCreatesBarChart(): void
+    {
+        $chart = $this->factory->bar([5, 15, 25], ['X', 'Y', 'Z']);
+        $view = $chart->createView();
+
+        $this->assertSame('bar', $view['options']['series'][0]['type']);
+        $this->assertSame([5, 15, 25], $view['options']['series'][0]['data']);
+    }
+
+    public function testFactoryCreatesPieChart(): void
+    {
+        $chart = $this->factory->pie(['Foo' => 40, 'Bar' => 60]);
+        $view = $chart->createView();
+
+        $this->assertSame('pie', $view['options']['series'][0]['type']);
+        $this->assertSame([
+            ['name' => 'Foo', 'value' => 40],
+            ['name' => 'Bar', 'value' => 60],
+        ], $view['options']['series'][0]['data']);
+    }
+
+    public function testFactoryCreatesRadarChart(): void
+    {
+        $chart = $this->factory->radar(
+            ['Team A' => [80, 90, 70], 'Team B' => [60, 75, 85]],
+            ['Speed', 'Strength', 'Stamina'],
+        );
+        $view = $chart->createView();
+
+        $this->assertSame('radar', $view['options']['series'][0]['type']);
+        $this->assertCount(2, $view['options']['series'][0]['data']);
+        $this->assertSame([['name' => 'Speed'], ['name' => 'Strength'], ['name' => 'Stamina']], $view['options']['radar']['indicator']);
+    }
+
+    public function testFactoryMergesSerieOptions(): void
+    {
+        $chart = $this->factory->line([1, 2, 3], [], ['name' => 'Revenue', 'smooth' => true]);
+        $view = $chart->createView();
+
+        $this->assertSame('Revenue', $view['options']['series'][0]['name']);
+        $this->assertTrue($view['options']['series'][0]['smooth']);
+    }
+
+    public function testFactoryMergesChartOptions(): void
+    {
+        $chart = $this->factory->bar([1, 2], [], [], ['title' => ['text' => 'My Bar']]);
+        $view = $chart->createView();
+
+        $this->assertSame('My Bar', $view['options']['title']['text']);
     }
 }
